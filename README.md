@@ -1,16 +1,35 @@
-# terraform-aws-template
+# terraform-aws-dms
 
-[![Lint Status](https://github.com/tothenew/terraform-aws-template/workflows/Lint/badge.svg)](https://github.com/tothenew/terraform-aws-template/actions)
-[![LICENSE](https://img.shields.io/github/license/tothenew/terraform-aws-template)](https://github.com/tothenew/terraform-aws-template/blob/master/LICENSE)
+[![Lint Status](https://github.com/tothenew/terraform-aws-dms/workflows/Lint/badge.svg)](https://github.com/tothenew/terraform-aws-dms/actions)
+[![LICENSE](https://img.shields.io/github/license/tothenew/terraform-aws-dms)](https://github.com/tothenew/terraform-aws-dms/blob/master/LICENSE)
 
-This is a template to use for baseline. The default actions will provide updates for section bitween Requirements and Outputs.
+This module provisions and configures Amazon MQ for dms, enabling secure and scalable message brokering within a region.
 
-The following content needed to be created and managed:
- - Introduction
-     - Explaination of module 
-     - Intended users
- - Resource created and managed by this module
- - Example Usages
+The following resources will be created:
+- Brokers
+- Configurations
+
+## Usages
+```
+module "dms {
+  source                        =   "./module/dms"
+  repl_subnet_group_subnet_ids  =   ["subnet-123456789","subnet-987654321"]
+  repl_instance_engine_version  =   "3.5.4"
+  source_endpoint               =   var.source_endpoint
+  destination_endpoint          =   var.destination_endpoint
+
+  replication_task  = {
+    replication_task_id       = "example-cdc"
+    migration_type            = "cdc"
+    replication_task_settings = "./task_settings.json"
+    table_mappings            = "./table_mappings.json"
+    source_endpoint_key       = "source"
+    target_endpoint_key       = "destination"
+  }
+
+  event_subscriptions           =   var.event_subscriptions
+}
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -21,24 +40,32 @@ The following content needed to be created and managed:
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_active-mq"></a> [active\_mq](#module\_active\_mq) | ./module/active-mq | n/a |
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
 
 ## Outputs
 
-No outputs.
-<!-- END_TF_DOCS -->
+| Name | Description |
+|------|-------------|
+
 
 ## Authors
 
@@ -46,4 +73,4 @@ Module managed by [TO THE NEW Pvt. Ltd.](https://github.com/tothenew)
 
 ## License
 
-Apache 2 Licensed. See [LICENSE](https://github.com/tothenew/terraform-aws-template/blob/main/LICENSE) for full details.
+Apache 2 Licensed. See [LICENSE](https://github.com/tothenew/terraform-aws-dms/blob/main/LICENSE) for full details.
